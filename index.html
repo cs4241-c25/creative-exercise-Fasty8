@@ -1,0 +1,225 @@
+<!-- Goal:
+### SVG
+ - Go through the [W3 Schools SVG Tutorial](https://www.w3schools.com/graphics/svg_intro.asp). Implement a web page that draws several different polygons in different colors using Canvas - the <canvas> tag. One of the polygons should include a color gradient. Create a button that when pressed changes either the size and/or position of a polygon. See [SVG Scripting](https://www.w3schools.com/graphics/svg_scripting.asp).
+ - Add a simple animated SVG image to a web page. You may want to refer to [Add Animated SVGs to React](https://www.svgator.com/help/getting-started/add-animated-svgs-to-react-website) -->
+
+<!-- SVG Styling  -->
+<!-- <html>
+<body>
+  <style>
+      body {
+        text-align: center;
+      }
+    </style>
+<<div style="text-align: center">
+
+<h1>SVG Creative Exercise</h1>
+
+<svg width="100vw" height="80vh" xmlns="http://www.w3.org/2000/svg">
+   Circle in the left area
+   <circle cx="50" cy="50" r="40" fill="pink" stroke="red" stroke-width="4"/>
+   
+   Rectangle in the center area
+   <rect x="120" y="20" width="80" height="80" fill="orange" stroke="yellow" stroke-width="2"/>
+   
+   Ellipse in the right area
+   <ellipse cx="250" cy="75" rx="40" ry="20" fill="blue" stroke="light blue" stroke-width="2"/>
+
+   <g transform="translate(300, 0)">
+   pentagon
+      <polygon 
+         id = "pentagon"
+         points="50,10 88,38 74,82 26,82 12,38" 
+         fill="lightblue" 
+         stroke="black" 
+         stroke-width="2" 
+      />
+   hexagon
+   <defs>
+      <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+         <stop offset="0%" stop-color="yellow" />
+         <stop offset="100%" stop-color="orange" />
+      </linearGradient>
+   </defs>
+         <polygon 
+            id = "hexagon"
+            points="150,10 185,30 185,70 150,90 115,70 115,30" 
+            fill="url(#grad1)"
+         />
+   </g>
+   Sorry your browser does not support inline SVG.
+ </svg>
+ 
+   <button onclick="random()">Random Movment</button>
+   <button onclick="grow()">Grow Shape</button>
+   <button onclick="shrink()">Shrink Shape</button>
+   <button onclick="reset()">Reset</button>
+</div>
+
+<script>
+   function random() {
+      var x = Math.floor(Math.random() * 1000);
+      var y = Math.floor(Math.random() * 1000);
+      var circle = document.querySelector("circle");
+      circle.setAttribute("cx", x);
+      circle.setAttribute("cy", y);
+   }
+   function grow() {
+      var rect = document.querySelector("rect");
+      var dim = rect.getAttribute("width");
+      dim = parseInt(dim) * 2;
+      rect.setAttribute("width", dim);
+      rect.setAttribute("height", dim);
+   }
+   function shrink() {
+      var ellipse = document.querySelector("ellipse");
+      var radX = ellipse.getAttribute("rx");
+      var radY = ellipse.getAttribute("ry");
+      radX = parseInt(radX) / 2;
+      radY = parseInt(radY) / 2;
+      ellipse.setAttribute("rx", radX);
+      ellipse.setAttribute("ry", radY);
+   }
+   function reset() {
+      var circle = document.querySelector("circle");
+      circle.setAttribute("cx", 50);
+      circle.setAttribute("cy", 50);
+      var rect = document.querySelector("rect");
+      rect.setAttribute("width", 80);
+      rect.setAttribute("height", 80);
+      var ellipse = document.querySelector("ellipse");
+      ellipse.setAttribute("rx", 40);
+      ellipse.setAttribute("ry", 20);
+   }
+</script> -->
+<!-- Canvas Styling -->
+<meta charset="UTF-8">
+    <title>SVG, but Canvas Creative Exercise</title>
+    <style>
+      body {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Canvas Creative Exercise</h1>
+    
+    <!-- Canvas fills full width (100vw) and 80% of viewport height (80vh) -->
+    <canvas id="myCanvas" width="1000" height="800"></canvas>
+    
+    <!-- Buttons for interactive functions -->
+    <div>
+      <button onclick="random()">Random Circle Movement</button>
+      <button onclick="grow()">Grow Rectangle</button>
+      <button onclick="shrink()">Shrink Ellipse</button>
+      <button onclick="reset()">Reset All Shapes</button>
+    </div>
+    
+    <script>
+      const canvas = document.getElementById("myCanvas");
+      const ctx = canvas.getContext("2d");
+      // Circle
+      let circle = { cx: 50, cy: 50, r: 40, fill: "pink", stroke: "red", strokeWidth: 4 };
+      // Rectangle
+      let rect = { x: 120, y: 20, width: 80, height: 80, fill: "orange", stroke: "yellow", strokeWidth: 2 };
+      // Ellipse 
+      let ellipse = { cx: 250, cy: 75, rx: 40, ry: 20, fill: "blue", stroke: "lightblue", strokeWidth: 2 };
+      // Pentagon
+      const pentagonPoints = [
+        { x: 50,  y: 10 },
+        { x: 88,  y: 38 },
+        { x: 74,  y: 82 },
+        { x: 26,  y: 82 },
+        { x: 12,  y: 38 }
+      ];
+      // Hexagon 
+      const hexagonPoints = [
+        { x: 150, y: 10 },
+        { x: 185, y: 30 },
+        { x: 185, y: 70 },
+        { x: 150, y: 90 },
+        { x: 115, y: 70 },
+        { x: 115, y: 30 }
+      ];
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+        ctx.arc(circle.cx, circle.cy, circle.r, 0, Math.PI * 2);
+        ctx.fillStyle = circle.fill;
+        ctx.fill();
+        ctx.lineWidth = circle.strokeWidth;
+        ctx.strokeStyle = circle.stroke;
+        ctx.stroke();
+        ctx.fillStyle = rect.fill;
+        ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
+        ctx.lineWidth = rect.strokeWidth;
+        ctx.strokeStyle = rect.stroke;
+        ctx.strokeRect(rect.x, rect.y, rect.width, rect.height);
+        ctx.beginPath();
+        ctx.ellipse(ellipse.cx, ellipse.cy, ellipse.rx, ellipse.ry, 0, 0, Math.PI * 2);
+        ctx.fillStyle = ellipse.fill;
+        ctx.fill();
+        ctx.lineWidth = ellipse.strokeWidth;
+        ctx.strokeStyle = ellipse.stroke;
+        ctx.stroke();
+        ctx.save(); 
+        ctx.translate(300, 0); 
+        ctx.beginPath();
+        ctx.moveTo(pentagonPoints[0].x, pentagonPoints[0].y);
+        for (let i = 1; i < pentagonPoints.length; i++) {
+          ctx.lineTo(pentagonPoints[i].x, pentagonPoints[i].y);
+        }
+        ctx.closePath();
+        ctx.fillStyle = "lightblue";
+        ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "black";
+        ctx.stroke();
+        let gradient = ctx.createLinearGradient(150, 10, 185, 10);
+        gradient.addColorStop(0, "yellow");
+        gradient.addColorStop(1, "orange");
+        ctx.beginPath();
+        ctx.moveTo(hexagonPoints[0].x, hexagonPoints[0].y);
+        for (let i = 1; i < hexagonPoints.length; i++) {
+          ctx.lineTo(hexagonPoints[i].x, hexagonPoints[i].y);
+        }
+        ctx.closePath();
+        ctx.fillStyle = gradient;
+        ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "black";
+        ctx.stroke();
+        ctx.restore(); 
+      }
+      draw();
+
+      function random() {
+        circle.cx = Math.floor(Math.random() * canvas.width);
+        circle.cy = Math.floor(Math.random() * canvas.height);
+        draw();
+      }
+
+      function grow() {
+        rect.width *= 2;
+        rect.height *= 2;
+        draw();
+      }
+
+      function shrink() {
+        ellipse.rx /= 2;
+        ellipse.ry /= 2;
+        draw();
+      }
+
+      function reset() {
+        circle.cx = 50;
+        circle.cy = 50;
+        rect.width = 80;
+        rect.height = 80;
+        ellipse.rx = 40;
+        ellipse.ry = 20;
+        draw();
+      }
+    </script>
+</body>
+</html>
